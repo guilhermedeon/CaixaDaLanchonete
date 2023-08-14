@@ -122,20 +122,29 @@ class CaixaDaLanchonete {
     }
   }
 
-  /*calcularValorDaCompraComLog(formaDePagamento, itens) {
+  calcularValorDaCompraSaidaJson(formaDePagamento, itens) {
     try {
       let pedido = this.criarPedido(itens);
       this.validarFormaDePagamento(formaDePagamento);
       this.validarExtras(pedido);
       let valorFinal = this.calcularValorDoPedido(pedido);
-      valorFinal = this.calcularDescontoOuAcrescimo(formaDePagamento, valorFinal);
+      valorFinal = this.calcularDescontoOuAcrescimo(
+        formaDePagamento,
+        valorFinal
+      );
+      for (let i in pedido) {
+        pedido[i] = {
+          ...pedido[i],
+          valorItem: pedido[i].quantidade * pedido[i].item.valor,
+        };
+      }
       valorFinal = valorFinal.toFixed(2);
-      console.log(pedido);
-      console.log("R$ %f", valorFinal);
+      let out = { pedido: pedido, valor: valorFinal };
+      console.log(JSON.stringify(out));
     } catch (e) {
       console.log(e.message);
     }
-  }*/
+  }
 }
 
 new CaixaDaLanchonete().calcularValorDaCompra("debito", ["chantily,1"]);
@@ -146,4 +155,15 @@ new CaixaDaLanchonete().calcularValorDaCompra("debito", [
 new CaixaDaLanchonete().calcularValorDaCompra("credito", [
   "combo1,1",
   "cafe,2",
+]);
+
+new CaixaDaLanchonete().calcularValorDaCompraSaidaJson("debito", [
+  "cafe,2",
+  "suco,2",
+  "sanduiche,2",
+  "salgado,2",
+  "chantily,2",
+  "queijo,2",
+  "combo1,2",
+  "combo2,2",
 ]);
